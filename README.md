@@ -5,10 +5,11 @@ What is Kerf?
 
 Kerf is a columnar tick database and time-series language for Linux/OSX/BSD/iOS/Android. It is written in C and natively speaks JSON and SQL. Kerf can be used for trading platforms, feedhandlers, low-latency networking, high-volume analysis of realtime and historical data, logfile processing, and more.
 
-**Contact Kevin:**
+**Demos**
 
-  kevin@kerfsoftware.com
-  
+For a demonstration, ask us at demo@kerfsoftware.com  
+ 
+ 
 **Website**
 
 http://kerfsoftware.com
@@ -16,6 +17,10 @@ http://kerfsoftware.com
 **Sales Partner:**
 
   Our sales partner is [Briarcliff-Hall](http://briarcliff-hall.com/). For sales inquiries please email [sales@briarcliff-hall.com](mailto:sales@briarcliff-hall.com?subject=Kerf Sales Inquiry) or call (201) 572-2766.
+
+**General Questions:**
+
+  kevin@kerfsoftware.com
 
 **Manual**
 
@@ -32,6 +37,7 @@ Kerf Screencast - Stock Basics II: Stats https://youtu.be/Pi6FXIYvTkk
 Kerf Screencast - CSV & Text Tricks: https://youtu.be/aDETohEScJM    
 Kerf Screencast - Bloomberg B-PIPE Datafeed: https://youtu.be/eVu50oSBZAE  
 
+Time Bars - https://getkerf.wordpress.com/2016/06/21/time-bars/
 
 Whirlwind Language Guide:
 -------------------------
@@ -299,8 +305,6 @@ Some operations yield array-wise results.
     is the same as 
       {{id:[1], time:[now()], brightness:[48.6]}}
     is the same as 
-      INSERT INTO {{id, time, brightness}} VALUES (1, now(), 48.6)       //single insert
-    is the same as 
       INSERT INTO {{id, time, brightness}} VALUES [[1], [now()], [48.6]] //bulk insert/append
     is the same as
       INSERT INTO {{id, time, brightness}} VALUES {id:1, time:now(), brightness:48.6}   //insert map
@@ -452,13 +456,13 @@ All of these methods require your data to be collected in a table before writing
 
 **FIXED-WIDTH FILE LOADING**
 
-Kerf supports fixed-width file loading. The motivating use-case for this is the NYSE TAQ fixed-width format. Perhaps the best way to understand how this works is to look at the [NYSE TAQ loading example script](https://github.com/kevinlawler/kerf/blob/master/scripts/taq.kerf). In addition to the fields supported by the CSV-style readers, the fixed-width reader supports the fields "QY", representing NYSE's strange timestamp format, and an enumerated NYSE dot-delimited symbol column.
+Kerf supports fixed-width file loading. The motivating use-case for this is the NYSE TAQ fixed-width format. Perhaps the best way to understand how this works is to look at the [NYSE TAQ loading example script](https://github.com/kevinlawler/kerf/blob/master/scripts/taq.kerf). In addition to the fields supported by the CSV-style readers, the fixed-width reader supports the fields "QR", representing NYSE's strange timestamp format, and an enumerated NYSE dot-delimited symbol column.
 
 To invoke the fixed-width field reader, use:
 
 
     file:'path/to/file.ext'
-    attributes: {fields: 'Q*Y*IF******',  widths: 9 1 16 4 9 11 1 2 16 1 1 2}
+    attributes: {fields: 'Q*R*IF******',  widths: 9 1 16 4 9 11 1 2 16 1 1 2}
     read_table_from_fixed_file(file, attributes)
 
 
@@ -1014,7 +1018,6 @@ Examples for average, standard deviation, and variance (avg, std, var).
   
 **LEGAL**
 
-Kerf uses [libcsv](http://sourceforge.net/projects/libcsv/).
 
 **MISC LANGUAGE SPECS**
 
@@ -1026,5 +1029,6 @@ Kerf uses [libcsv](http://sourceforge.net/projects/libcsv/).
   Certain objects will intern strings locally. Kerf data structures use
   optimized hash tables and b-trees. All Kerf objects serialize automatically
   and use the same [decompressed] representation in-memory, on-disk, and over
-  the network. Kerf uses  By default the PRNG is initialized with a nondeterministic seed.
-  By default times are UTC.
+  the network. IPC is compressed when it would lower transfer times. 
+  By default the PRNG is initialized with a nondeterministic seed. By default
+  times are UTC.
